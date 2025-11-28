@@ -1,6 +1,6 @@
 <?php
-// TODO: Start session
-
+// Start session
+session_start();
 
 // Database configuration
 $host = 'localhost';
@@ -8,20 +8,51 @@ $user = 'root';
 $pass = '';
 $db = 'dcma';
 
-// TODO: Create database connection
+// Create database connection
+$conn = mysqli_connect($host, $user, $pass, $db);
 
+if (!$conn) {
+    die('Connection failed: ' . mysqli_connect_error());
+}
 
-// TODO: Check connection and handle errors
+mysqli_set_charset($conn, 'utf8');
 
+// Helper Functions
 
-// TODO: Set charset to utf8
+// Check if user is logged in
+function isLoggedIn() {
+    return isset($_SESSION['user_id']);
+}
 
+// Check if user has specific role
+function hasRole($role) {
+    return isset($_SESSION['role']) && $_SESSION['role'] === $role;
+}
 
-// TODO: Create helper functions
-// - isLoggedIn(): Check if user is logged in
-// - hasRole($role): Check if user has specific role
-// - requireLogin(): Redirect if not logged in
-// - requireRole($role): Redirect if user doesn't have required role
-// - sanitize($data): Sanitize user input to prevent SQL injection
+// Redirect if not logged in
+function requireLogin() {
+    if (!isLoggedIn()) {
+        header('Location: login.php');
+        exit();
+    }
+}
+
+// Redirect if user doesn't have required role
+function requireRole($role) {
+    requireLogin();
+    if (!hasRole($role)) {
+        header('Location: index.php');
+        exit();
+    }
+}
+
+// Sanitize user input to prevent SQL injection
+function sanitize($data) {
+    global $conn;
+    if ($conn) {
+        return mysqli_real_escape_string($conn, trim($data));
+    }
+    return trim($data); // Basic sanitization when DB not available
+}
 
 ?>

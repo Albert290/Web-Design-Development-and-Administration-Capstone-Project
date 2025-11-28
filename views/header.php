@@ -11,8 +11,13 @@
         <div class="header-content">
             <h1>Dynamic Class Management</h1>
             <nav>
-                <!-- TODO: Display logged in user's name and role -->
-                <!-- TODO: Add logout button -->
+                <?php if (isLoggedIn()): ?>
+                    <div class="user-info">
+                        <span class="user-name">Welcome, <?php echo htmlspecialchars($_SESSION['full_name']); ?></span>
+                        <span class="user-role">(<?php echo ucfirst($_SESSION['role']); ?>)</span>
+                        <a href="../logout.php" class="btn btn-secondary logout-btn">Logout</a>
+                    </div>
+                <?php endif; ?>
             </nav>
         </div>
     </header>

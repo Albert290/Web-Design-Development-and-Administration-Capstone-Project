@@ -1,10 +1,12 @@
 <?php
-// TODO: Include config file
+// Include config file
+require_once 'config/config.php';
 
+// Destroy session
+session_destroy();
 
-// TODO: Destroy session
-
-
-// TODO: Redirect to login page
+// Redirect to login page
+header('Location: login.php');
+exit();
 
 ?>
